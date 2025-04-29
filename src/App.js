@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect, useReducer } from "react";
-import "./App.css";
 
 function TasksList({ tasks, onDelete }) {
   return (
@@ -8,7 +7,7 @@ function TasksList({ tasks, onDelete }) {
         <ul>
           {tasks.map((item, key) => (
             <li key={item.id}>
-              <button onClick={() => onDelete(item)}>❌</button>
+              <button onClick={() => onDelete(item)}>Delete</button>
               {item.task}
             </li>
           ))}
