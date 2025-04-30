@@ -1,26 +1,8 @@
 import { useState, useRef, useEffect, useReducer } from "react";
-
-function TasksList({ tasks, onDelete }) {
-  return (
-    <>
-      {tasks.length > 0 ? (
-        <ul>
-          {tasks.map((item, key) => (
-            <li key={item.id}>
-              <button onClick={() => onDelete(item)}>Delete</button>
-              {item.task}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>Empty list</p>
-      )}
-    </>
-  );
-}
+import logo from "../assets/logo.avif";
+import TasksList from "./TasksList";
 
 // a mejorar: añadir el local storage
-// mejorar css
 
 function reducer(state, action) {
   switch (action.type) {
@@ -43,6 +25,7 @@ function App() {
   //   const storedValue = localStorage.getItem("tasks").split(",");
   //   return storedValue ? storedValue : [];
   // });
+
   const [taskToAdd, setTaskToAdd] = useState(initialValue);
   const counterRef = useRef(0);
 
@@ -73,7 +56,10 @@ function App() {
   }
 
   return (
-    <div>
+    <div className="app">
+      <header>
+        <img src={logo} alt="logo"></img>
+      </header>
       <form onSubmit={handleSubmit}>
         <label>Add a new task:</label>
         <input
