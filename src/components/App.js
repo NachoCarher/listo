@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useReducer } from "react";
+import { useState, useRef, useReducer } from "react";
 import logo from "../assets/logo.avif";
 import TasksList from "./TasksList";
 
@@ -7,6 +7,8 @@ import TasksList from "./TasksList";
 function reducer(state, action) {
   switch (action.type) {
     case "add":
+      if (!action.payload.task) return state;
+
       return [...state, action.payload];
     case "delete":
       const newList = state.filter((task) => task.id !== action.payload.id);
@@ -18,16 +20,14 @@ function reducer(state, action) {
 
 function App() {
   const initialValue = { task: "", id: -1 };
-
   const [state, dispatch] = useReducer(reducer, []);
+  const [taskToAdd, setTaskToAdd] = useState(initialValue);
+  const counterRef = useRef(0);
 
   // const [tasksList, setTasksList] = useState(function () {
   //   const storedValue = localStorage.getItem("tasks").split(",");
   //   return storedValue ? storedValue : [];
   // });
-
-  const [taskToAdd, setTaskToAdd] = useState(initialValue);
-  const counterRef = useRef(0);
 
   // useEffect(
   //   function () {
@@ -38,21 +38,10 @@ function App() {
 
   function handleSubmit(event) {
     event.preventDefault();
-
-    if (!taskToAdd) return;
-
     // setTasksList([...tasksList, taskToAdd]);
     dispatch({ type: "add", payload: taskToAdd });
     counterRef.current++;
     setTaskToAdd(initialValue);
-  }
-
-  function handleDelete(taskToDelete) {
-    // const newList = tasksList.filter((task) => task !== name);
-    // console.log("Task to delete: " + name);
-    // setTasksList(newList);
-
-    dispatch({ type: "delete", payload: taskToDelete });
   }
 
   return (
@@ -73,7 +62,12 @@ function App() {
       </form>
       <span>Tasks added: {state.length}</span>
 
-      <TasksList tasks={state} onDelete={handleDelete} />
+      <TasksList
+        tasks={state}
+        onDelete={(taskToDelete) =>
+          dispatch({ type: "delete", payload: taskToDelete })
+        }
+      />
     </div>
   );
 }
